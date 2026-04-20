@@ -1,77 +1,75 @@
 R1
-Router> enable
-Router# configure terminal
-Router(config)# hostname R1
-R1(config)# interface loopback 0
-R1(config-if)# ip address 1.1.1.1 255.255.255.255
-R1(config-if)# exit
-R1(config)# interface e0/0
-R1(config-if)# ip address 10.0.0.1 255.255.255.0
-R1(config-if)# no shutdown
-R1(config-if)# exit
-R1(config)# interface e0/1
-R1(config-if)# ip address 192.168.1.1 255.255.255.0
-R1(config-if)# no shutdown
-R1(config-if)# exit
-R1(config)# router ospf 1
-R1(config-router)# network 1.1.1.0 0.0.0.255 area 0
-R1(config-router)# network 10.0.0.0 0.0.0.255 area 0
-R1(config-router)# exit
-R1(config)# mpls label range 100 199
-R1(config)# mpls label protocol ldp
-R1(config)# mpls ldp router-id loopback 0
-R1(config)# interface e0/0
-R1(config-if)# mpls ip
-R1(config-if)# exit
-R1(config)# ip vrf A-1
-R1(config-vrf)# rd 500:1
-R1(config-vrf)# route-target import 500:1
-R1(config-vrf)# route-target export 500:1
-R1(config-vrf)# exit
-R1(config)# exit
+Router>enable 
+Router#conf t
+Router(config)#hostname R1
+R1(config)# interface loopback 0 
+R1(config-if)#ip address 1.1.1.1 255.255.255.255
+R1(config-if)#exit 
+R1(config)#int e0/0
+R1(config-if)#ip address 10.0.0.1 255.255.255.0 
+R1(config-if)#no shut
+R1(config)#int e0/1 
+R1(config-if)#ip address 192.168.1.1 255.255.255.0 
+R1(config-if)#no shut 
+R1(config)#router ospf 1
+R1(config-router)#network 1.1.1.0 0.0.0.255 area 0 
+R1(config-router)#network 10.0.0.0 0.0.0.255 area 0 
+R1(config-router)#exit 
+R1(config)#mpls label range 100 199 
+R1(config)#mpls label protocol ldp
+R1(config)#mpls ldp router-id loopback 0 
+R1(config)#int e0/0
+R1(config-if)#mpls ip 
+R1(config)#ip vrf A-1 
+R1(config-vrf)#rd 500:1 
+R1(config-vrf)#route-target import 500:1 
+R1(config-vrf)#route-target export 500:1 
+R1(config-vrf)#exit 
+R1(config)#exit
+R1#sh ip vrf
+R1(config)#int e0/1
+R1(config-if)#ip vrf 
+R1(config-if)#ip address 192.168.1.1 255.255.255.0
+R1(config-if)#end 
+R1#sh ip route vrf A-1 
+R1#sh ip vrf Name Default RD Interfaces A-1 500:1 Et0/1 
+R1(config)#router ospf 10 vrf A-1 
+R1(config-router)#network 192.168.1.0 0.0.0.255 area 10 
+R1(config-router)#end
+R1#sh ip ospf neighbor 
+R1#sh ip ospf 10 neighbor
+R1#sh ip route vrf A-1 ospf 
+R1(config)#router bgp 500
+R1(config-router)#no bgp default ipv4-unicast
+R1(config-router)#neighbor 3.3.3.3 remote-as 500
+R1(config-router)#neighbor 3.3.3.3 update-source loopback 0 
+R1(config-router)#address-family vpnv4 unicast 
+R1(config-router-af)#neighbor 3.3.3.3 activate 
+R1(config-router-af)#neighbor 3.3.3.3 send-community extended 
+R1(config-router-af)#neighbor 3.3.3.3 next-hop-self 
+R1(config-router-af)#end 
+R1#sh ip bgp vpnv4 all summary
+R1(config)#router bgp 500 
+R1(config-router)#address-family ipv4 vrf A-1
+R1(config-router-af)#redistribute ospf 10 vrf A-1 match internal external 1 external 2 
+R1(config-router-af)#exit R1(config-router)#exit 
+R1(config)#router ospf 10 vrf A-1 
+R1(config-router)#redistribute bgp 500 subnets 
+R1(config-router)#end 
+R1#sh ip bgp 
 
-R1# show ip vrf
-R1# show ip vrf detail
-R1(config)# interface e0/1
-R1(config-if)# ip vrf forwarding A-1
-R1(config-if)# ip address 192.168.1.1 255.255.255.0
-R1(config-if)# end
-R1# show ip route vrf A-1
-R1# show ip vrf
-R1(config)# router ospf 10 vrf A-1
-R1(config-router)# network 192.168.1.0 0.0.0.255 area 10
-R1(config-router)# end
-R1# show ip ospf neighbor
-R1# show ip ospf 10 neighbor
-R1# show ip route vrf A-1 ospf
-R1(config)# router bgp 500
-R1(config-router)# no bgp default ipv4-unicast
-R1(config-router)# neighbor 3.3.3.3 remote-as 500
-R1(config-router)# neighbor 3.3.3.3 update-source loopback 0
-R1(config-router)# address-family vpnv4 unicast
-R1(config-router-af)# neighbor 3.3.3.3 activate
-R1(config-router-af)# neighbor 3.3.3.3 send-community extended
-R1(config-router-af)# neighbor 3.3.3.3 next-hop-self
-R1(config-router-af)# end
-R1# show ip bgp vpnv4 all summary
-R1(config)# router bgp 500
-R1(config-router)# address-family ipv4 vrf A-1
-R1(config-router-af)# redistribute ospf 10 vrf A-1 match internal external 1 external 2
-R1(config-router-af)# exit
-R1(config-router)# exit
-
-R1(config)# router ospf 10 vrf A-1
-R1(config-router)# redistribute bgp 500 subnets
-R1(config-router)# end
-R1# show ip bgp vpnv4 all
-R1# show ip route vrf A-1
-R1# show ip route vrf A-1
-R1# show ip route vrf A-1 bgp
-R1# ping vrf A-1 4.4.4.4
+R1#sh ip route vrf A-1 
+R1#sh ip route vrf A-1 bgp
+R1#ping vrf A-1 4.4.4.4 
 
 
 
-R2
+
+
+
+
+
+R2 
 Router>enable
 Router#conf t 
 Router(config)#hostname R2 
@@ -89,11 +87,14 @@ R2(config-router)#network 2.2.2.0 0.0.0.255 area 0
 R2(config-router)#network 10.0.0.0 0.0.0.255 area 0
 R2(config-router)#network 10.0.1.0 0.0.0.255 area 0 
 R2(config-router)#exit 
-R2(config)#mpls label range 200 299 R2(config)#mpls label protocol ldp 
+R2(config)#mpls label range 200 299 
+R2(config)#mpls label protocol ldp 
 R2(config)#mpls ldp router-id loopback 0 
 R2(config)#int e0/0 R2(config-if)#mpls ip 
 R2(config-if)#int e0/1 
 R2(config-if)#mpls ip 
+
+
 
 
 R3 
@@ -126,33 +127,29 @@ R3(config-vrf)#route-target import 500:1
 R3(config-vrf)#route-target export 500:1
 R3#sh ip vrf Name Default RD Interfaces A-2 500:1
 R3#sh ip vrf detail 
-R3(config)# interface e0/1
-R3(config-if)# ip vrf forwarding A-2
-R3(config-if)# ip address 192.168.2.3 255.255.255.0
-R3(config-if)# end
-R3# show ip route vrf A-2
-
-
-R3# show ip vrf
-R3(config)# router ospf 10 vrf A-2
-R3(config-router)# network 192.168.2.0 0.0.0.255 area 0
-R3(config-router)# end
-R3# show ip ospf 10 neighbor
-R3# show ip route vrf A-2 ospf
-R3(config)# router bgp 500
-R3(config-router)# no bgp default ipv4-unicast
-R3(config-router)# neighbor 1.1.1.1 remote-as 500
-R3(config-router)# neighbor 1.1.1.1 update-source loopback 0
-R3(config-router)# address-family vpnv4 unicast
-R3(config-router-af)# neighbor 1.1.1.1 activate
-R3(config-router-af)# neighbor 1.1.1.1 send-community extended
-R3(config-router-af)# neighbor 1.1.1.1 next-hop-self
-R3(config-router-af)# end
-R3# show ip bgp vpnv4 all
-
+R3(config)#int e0/1 
+R3(config-if)#ip vrf 
+R3(config-if)#ip address 192.168.2.3 255.255.255.0 
+R3(config-if)#end
+R3#sh ip route vrf A-2
+R3#sh ip vrf Name Default RD Interfaces A-2 500:1 Et0/1 
+R3(config)#router ospf 10 vrf A-2
+R3(config-router)#network 192.168.2.0 0.0.0.255 area 0 
+R3(config-router)#end 
+R3#sh ip ospf 10 neighbor 
+R3#sh ip route vrf A-2 ospf 
+R3(config)#router bgp 500 
+R3(config-router)#no bgp default ipv4-unicast 
+R3(config-router)#neighbor 1.1.1.1 remote-as 500 
+R3(config-router)#neighbor 1.1.1.1 update-source loopback 0 
+R3(config-router)#address-family vpnv4 unicast 
+R3(config-router-af)#neighbor 1.1.1.1 activate 
+R3(config-router-af)#neighbor 1.1.1.1 send-community extended
+R3(config-router-af)#neighbor 1.1.1.1 next-hop-self
+R3#sh ip bgp vpnv4 all 
 R3(config)#router bgp 500 
 R3(config-router)#address-family ipv4 vrf A-2
-R3(config-router-af)#redistribute ospf 10 vrf A-2 match internal external 1 external 2 
+R3(config-router-af)#redistribute ospf 10 vrf A-2 
 R3(config-router-af)#exit 
 R3(config-router)#exit 
 R3(config)#router ospf 10 vrf A-2
@@ -160,11 +157,13 @@ R3(config-router)#redistribute bgp 500 subnets
 R3(config-router)#end 
 R3#sh ip bgp vpnv4 all 
 R3#sh ip route vrf A-2
+R3#ping vrf A-2 5.5.5.5 T
 
 
 
-R4 
-Router>enable 
+
+
+R4 Router>enable 
 Router#conf t 
 Router(config)#hostname R4
 R4(config)#int loopback 0 
@@ -179,8 +178,8 @@ R4(config-router)#network 4.4.4.0 0.0.0.255 area 10
 R4(config-router)#network 192.168.1.0 0.0.0.255 area 10 
 R4(config-router)#exit
 R4#sh ip route ospf 
-R4# show ip route
-R4# ping 5.5.5.5 source loopback 0
+R4#ping 5.5.5.5 source lo 0 
+
 
 
 R5
@@ -200,4 +199,3 @@ R5(config-router)#network 192.168.2.0 0.0.0.255 area 0
 R5(config-router)#exit
 R5#sh ip route ospf 
 R5#ping 4.4.4.4 source lo 0 
-
