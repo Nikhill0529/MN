@@ -1,21 +1,20 @@
-DLS1 
-Switch>en 
+DLS1 Switch>en 
 Switch#conf t
 Switch(config)#hostname DLS1
 DLS1(config)#interface vlan 1 
 DLS1(config-if)#ip address 172.16.1.1 255.255.255.0 
 DLS1(config-if)#no shutdown
-DLS1(config-if)#exit 
+DLS1(config-if)#exit
 DLS1(config)#interface range e0/0-1
 DLS1(config-if-range)#switchport trunk encapsulation dot1q 
 DLS1(config-if-range)#switchport mode trunk 
 DLS1(config-if-range)#channel-group 1 mode desirable 
-DLS1(config-if-range)#exit  
+DLS1(config-if-range)#exit 
 DLS1(config)#interface range e0/2-3 
 DLS1(config-if-range)#switchport trunk encapsulation dot1q
 DLS1(config-if-range)#switchport mode trunk 
 DLS1(config-if-range)#channel-group 2 mode desirable 
-DLS1(config-if-range)#exit  
+DLS1(config-if-range)#exit 
 DLS1(config)#vtp domain SWPOD 
 DLS1(config)#vtp version 2
 DLS1(config)#vlan 100 
@@ -23,7 +22,8 @@ DLS1(config-vlan)#name Payroll
 DLS1(config-vlan)#exit
 DLS1(config)#vlan 200 
 DLS1(config-vlan)#name Engineering 
-DLS1(confg)#interface vlan 100
+DLS1(config-vlan)#exit 
+DLS1(config)#interface vlan 100
 DLS1(config-if)#ip address 172.16.100.1 255.255.255.0 
 DLS1(config-if)#no shutdown
 DLS1(config-if)#exit 
@@ -31,7 +31,8 @@ DLS1(config)#interface vlan 200
 DLS1(config-if)#ip address 172.16.200.1 255.255.255.0 
 DLS1(config-if)#no shutdown 
 DLS1(config-if)#exit
-DLS1#sh ip route
+DLS1(config)#ip routing
+DLS1#sh ip route 
 
 DLS1(config)#ip sla 1 
 DLS1(config-ip-sla)#icmp-echo 172.16.100.101
@@ -50,10 +51,11 @@ DLS1(config)#ip sla schedule 2 life forever start-time now
 DLS1(config)#ip sla schedule 3 life forever start-time now 
 DLS1(config)#ip sla schedule 4 life forever start-time now 
 DLS1#show ip sla configuration 1 
-DLS1# show ip sla configuration 3
-DLS1#show ip sla application
-DLS1# show ip sla statistics 1
-DLS1# show ip sla statistics 3
+DLS1#show ip sla configuration 3 
+DLS1#show ip sla application 
+DLS1#show ip sla statistics 1
+DLS1#show ip sla statistics 3 
+ 
 DLS1(config)#vlan 100 
 DLS1(config-vlan)#remote-span 
 DLS1(config-vlan)#exit 
@@ -87,8 +89,10 @@ ALS1(config)#ip sla responder udp-echo ipaddress 172.16.1.1 port 5000
 ALS1#show ip sla responder 
 
 
+
 ALS2 Switch>en 
-Switch#conf t  
+Switch#conf t 
+Switch(config)#hostname ALS2 
 ALS2(config)#interface vlan 1 
 ALS2(config-if)#ip address 172.16.1.102 255.255.255.0
 ALS2(config-if)#no shutdown 
@@ -97,20 +101,16 @@ ALS2(config)#ip default-gateway 172.16.1.1
 ALS2(config)#interface range e0/0-1 
 ALS2(config-if-range)#switchport trunk encapsulation dot1q 
 ALS2(config-if-range)#switchport mode trunk 
-ALS2(config-if-range)#channel-group 2 mode desirable
-ALS2(config-if-range)#exit  
+ALS2(config-if-range)#channel-group 2 mode desirable 
+ALS2(config-if-range)#exit 
 ALS2(config)#interface range e0/2-3 
 ALS2(config-if-range)#switchport trunk encapsulation dot1q 
 ALS2(config-if-range)#switchport mode trunk 
 ALS2(config-if-range)#channel-group 1 mode desirable 
 ALS2(config-if-range)#exit 
 ALS2(config)#vtp mode
-ALS2(config)#int e1/0 
-ALS2(config-if)#switchport mode access
+ALS2(config)#int e1/0 ALS2(config-if)#switchport mode access
 ALS2(config-if)#switchport access vlan 200
-ALS2(config-if)#exit
+ALS2(config-if)#exit Configure Cisco IOS IP SLA responders.
 ALS2(config)#ip sla responder 
 ALS2(config)#ip sla responder udp-echo ipaddress 172.16.1.1 port 5000
-
-
-
