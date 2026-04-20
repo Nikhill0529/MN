@@ -7,7 +7,6 @@ DLS1(config-if)#exit
 DLS1(config)#interface vlan 99
 DLS1(config-if)#ip address 10.1.99.1 255.255.255.0 
 DLS1(config-if)#no shutdown
-
 DLS1(config)#int range e0/2-3 
 DLS1(config-if-range)#no switchport 
 DLS1(config-if-range)#no ip address 
@@ -19,14 +18,15 @@ DLS1(config-if)#end
 DLS1(config)#int range e0/0-1 
 DLS1(config-if-range)#switchport trunk encapsulation dot1q
 DLS1(config-if-range)#switchport mode trunk
-DLS1(config-if-range)# channel-group 1 mode desirable
-DLS1(config-if-range)# end
-DLS1# show interfaces trunk
-DLS1(config)# ip routing
+DLS1(config-if-range)#channel-group 1 mode desirable 
+DLS1(config-if-range)#end
+DLS1#sh interfaces trunk 
+DLS1(config)#ip routing 
 DLS1(config)#ip route 192.168.1.0 255.255.255.252 172.16.12.2
 DLS1(config)# ip route 192.168.1.0 255.255.255.0 10.1.120.1 
 DLS1(config)# ip route 192.168.1.0 255.255.255.0 10.1.110.1
-DLS1# show ip route
+DLS1#sh ip route 
+
 
 
 DLS2 Switch>en Switch#conf t 
@@ -37,7 +37,7 @@ DLS2(config-if)#exit
 DLS2(config)#interface vlan 110
 DLS2(config-if)#ip address 10.1.110.1 255.255.255.0 
 DLS2(config-if)#no shutdown 
-DLS2(config-if)#exit
+DLS2(config-if)#exit 
 DLS2(config)#interface vlan 120 
 DLS2(config-if)#ip address 10.1.120.1 255.255.255.0 
 DLS2(config-if)#no shutdown
@@ -50,7 +50,8 @@ DLS2(config-if-range)#channel-group 2 mode on
 DLS2(config-if-range)#exit 
 DLS2(config)#interface port-channel 2 
 DLS2(config-if)#ip address 172.16.12.2 255.255.255.252 
-DLS2(config-if)#end DLS2(config)#interface range e0/0-1 
+DLS2(config-if)#end 
+DLS2(config)#interface range e0/0-1 
 DLS2(config-if-range)#switchport trunk encapsulation dot1q 
 DLS2(config-if-range)#switchport mode trunk 
 DLS2(config-if-range)#channel-group 3 mode desirable 
@@ -59,34 +60,33 @@ DLS2(config)#interface range e1/0-1
 DLS2(config-if-range)#switchport trunk encapsulation dot1q 
 DLS2(config-if-range)#switchport mode trunk 
 DLS2(config-if-range)#channel-group 4 mode desirable 
-
-DLS2(config-if-range)# end
-DLS2# show interfaces trunk
-DLS2(config)# ip routing
-DLS2(config)# ip route 172.16.1.0 255.255.255.252 172.16.12.1
-DLS2(config)# ip route 172.16.1.0 255.255.255.0 10.1.99.1
+DLS2(config-if-range)#end
+DLS2#sh interfaces trunk 
+DLS2(config)#ip route 172.16.1.0 255.255.255.252 172.16.12.1 
+DLS2(config)# ip route 172.16.1.0 255.255.255.0 10.1.99.1 
 DLS2(config)#interface e1/2 
 DLS2(config-if)#switchport mode access
 DLS2(config-if)#switchport access vlan 110 
 DLS2#sh ip route
 
 
-Switch
-Switch> en
-Switch# conf t
+
+
+Switch>en 
+Switch#conf t 
 Switch(config)#hostname ALS1
 ALS1(config)#ip default-gateway 10.1.99.1 
 ALS1(config)#ip default-gateway 10.1.110.1 
-ALS1(config)#ip default-gateway 10.1.100.2  
+ALS1(config)#ip default-gateway 10.1.100.2 
 ALS1(config)#int range e0/0-1 
 ALS1(config-if-range)#switchport trunk encapsulation dot1q
 ALS1(config-if-range)#switchport mode trunk 
-ALS1(config-if-range)#channel-group 1 mode desirable  
+ALS1(config-if-range)#channel-group 1 mode desirable 
 ALS1(config-if-range)#exit 
 ALS1(config)#int range e0/2-3 
 ALS1(config-if-range)#switchport trunk encapsulation dot1q
 ALS1(config-if-range)#switchport mode trunk 
-ALS1(config-if-range)#channel-group 4 mode desirable 
+ALS1(config-if-range)#channel-group 4 mode desirable
 ALS1(config-if-range)#end 
 ALS1#sh etherchannel summary 
 ALS1(config)#interface e1/0
@@ -94,15 +94,22 @@ ALS1(config-if)#switchport mode access
 ALS1(config-if)#switchport access vlan 100 ALS2 
 
 
-Switch>en Switch#conf t
+
+Switch>en
+Switch#conf t
 Switch(config)#hostname ALS2
 ALS2(config)#ip default-gateway 10.1.120.1 
 ALS2(config)#int range e0/0-1
 ALS2(config-if-range)#switchport trunk encapsulation dot1q 
 ALS2(config-if-range)#switchport mode trunk
-ALS2(config-if-range)#channel-group 3 mode desirable  
+ALS2(config-if-range)#channel-group 3 mode desirable 
 ALS2(config-if-range)#end 
 ALS2#sh etherchannel summary 
-ALS2(config)# interface e0/2
-ALS2(config-if)# switchport mode access
-ALS2(config-if)# switchport access vlan 120
+ALS2(config)#interface e0/2
+ALS2(config-if)#switchport mode access 
+ALS2(config-if)#switchport access vlan 120 
+
+
+HOST A VPCS> ip 10.1.100.1 255.255.255.0 10.1.100.2 HOST B
+VPCS> ip 10.1.120.2 255.255.255.0 10.1.120.1 HOST D 
+VPCS> ip 10.1.110.2 255.255.255.0 10.1.110.1
