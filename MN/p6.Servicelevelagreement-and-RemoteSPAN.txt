@@ -31,7 +31,7 @@ DLS1(config)#interface vlan 200
 DLS1(config-if)#ip address 172.16.200.1 255.255.255.0 
 DLS1(config-if)#no shutdown 
 DLS1(config-if)#exit
-DLS1#sh ip 
+DLS1#sh ip route
 
 DLS1(config)#ip sla 1 
 DLS1(config-ip-sla)#icmp-echo 172.16.100.101
