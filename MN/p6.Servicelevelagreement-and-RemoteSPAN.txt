@@ -23,7 +23,7 @@ DLS1(config-vlan)#name Payroll
 DLS1(config-vlan)#exit
 DLS1(config)#vlan 200 
 DLS1(config-vlan)#name Engineering 
-DLS1(config-vlan)#exit 
+DLS1(confg)#interface vlan 100
 DLS1(config-if)#ip address 172.16.100.1 255.255.255.0 
 DLS1(config-if)#no shutdown
 DLS1(config-if)#exit 
